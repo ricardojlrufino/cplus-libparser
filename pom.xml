@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.com.criativasoft</groupId>
+	<artifactId>cplus-libparser</artifactId>
+	<version>0.0.1</version>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
+	<repositories>
+	    <repository>
+	      <id>local</id>
+	      <url>file:${basedir}/lib</url>
+	    </repository>
+	 </repositories>
+  
+	<licenses>
+		<license>
+			<name>Eclipse Public License - v 1.0</name>
+			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Ricardo JL Rufino</name>
+			<email>ricardo.jl.rufino@gmail.com</email>
+			<organization>CriativaSoft</organization>
+			<organizationUrl>http://www.criativasoft.com.br</organizationUrl>
+		</developer>
+	</developers>
+
+	<dependencies>
+		<dependency>
+			<groupId>eclipse</groupId>
+			<artifactId>eclipse-core</artifactId>
+			<version>5.6.0</version>
+<!-- 			<scope>system</scope> -->
+<!-- 			<systemPath>${basedir}/lib/org.eclipse.cdt.core_5.6.0.201402142303.jar</systemPath> -->
+		</dependency>
+		<dependency>
+			<groupId>eclipse</groupId>
+			<artifactId>eclipse-common</artifactId>
+			<version>3.6.200</version>
+<!-- 			<scope>system</scope> -->
+<!-- 			<systemPath>${basedir}/lib/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar</systemPath> -->
+		</dependency>
+	</dependencies>
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<!-- <archive> <manifest> <mainClass>br.com.criativasoft.addressextractor.view.MainView</mainClass> 
+						</manifest> </archive> -->
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<appendAssemblyId>false</appendAssemblyId>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+            		
+          
+                    
+		</plugins>
+	</build>
+</project>
