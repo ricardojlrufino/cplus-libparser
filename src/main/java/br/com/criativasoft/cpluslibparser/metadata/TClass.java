@@ -19,7 +19,7 @@ package br.com.criativasoft.cpluslibparser.metadata;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TClass extends TElement implements TIHasParent {
+public class TClass extends TElement {
     
     private static final long serialVersionUID = 1941012827449860693L;
 

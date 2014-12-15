@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class TFunction extends TElement implements TIHasParent {
+public class TFunction extends TElement {
     
     private static final long serialVersionUID = 4220518946527465434L;
 
@@ -78,7 +78,6 @@ public class TFunction extends TElement implements TIHasParent {
         this.parent = parent;
     }
     
-    @Override
     public TClass getParent() {
         return this.parent;
     }
