@@ -13,7 +13,7 @@ This library was created with the main objective to be used in the **Arduino IDE
 Build
 ====
 
-Use maven to build, the jar generated already has the necessary dependencies  
+Use maven to build, the generated jar include the necessary dependencies  
 > mvn package
 
 I believe this is a good example of using the CDT Parser outside of Eclipse, because there is almost no information or example of using.
