@@ -5,7 +5,7 @@ Library for metadata extraction (information about classes, methods, variables) 
 This library uses the Eclipse parser (standalone), and extracts the most relevant information (primarily used to autocomplete).
 
 The main advantage is that it is entirely in **Java** and no requires native code (like JNI) .  
-The library makes the scanner **asynchronous** mode and **multi-thread**, and can make the data parser *in memory* (from strings)
+The library makes the scanner in **asynchronous** mode and **multi-thread**, and can make the data parser **in-memory** (from strings)
 
 This library was created with the main objective to be used in the **Arduino IDE autocomplete system**.
 
