@@ -20,6 +20,8 @@ I believe this is a good example of using the CDT Parser outside of Eclipse, bec
 
 The code has been optimized to use minimal Eclipse dependencies.
 
+TIP: You can use the project [eclipse-cdt-standalone-astparser](https://github.com/ricardojlrufino/eclipse-cdt-standalone-astparser) to see a TreeView code of the source code structure, serving for debugging purposes
+
 *Thank you to everyone who has reported bugs and suggested fixes.*
 
 Diagram
