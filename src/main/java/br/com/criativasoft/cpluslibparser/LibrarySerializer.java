@@ -22,10 +22,9 @@ import java.io.IOException;
 import br.com.criativasoft.cpluslibparser.metadata.TLibrary;
 
 public interface LibrarySerializer {
-    
-    public void serialize(TLibrary library, File file) throws IOException;
-    
-    public TLibrary deserialize(File file) throws IOException;
-    
+
+    public void serialize( TLibrary library , File file ) throws IOException;
+
+    public TLibrary deserialize( File file ) throws IOException;
 
 }

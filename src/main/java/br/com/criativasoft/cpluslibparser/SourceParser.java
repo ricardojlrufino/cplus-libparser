@@ -177,6 +177,13 @@ public class SourceParser {
                 LOG.finer("#"+tFunction);
             }
             
+            LOG.finer("=========== Errors =============");
+            
+            for (TError node : errors) {
+                LOG.finer("#"+node);
+            }
+  
+            
             LOG.finer("=========== Classes =============");
             
             for (TClass klass : classes) {

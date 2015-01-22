@@ -22,34 +22,34 @@ import br.com.criativasoft.cpluslibparser.utils.ExtFileFilter;
 
 public class HeaderLibraryScanner extends LibraryScanner {
 
-	private File folder;
+    private File folder;
 
-	public HeaderLibraryScanner(File folder) {
-		super();
-		this.folder = folder;
-	}
+    public HeaderLibraryScanner(File folder) {
+        super();
+        this.folder = folder;
+    }
 
-	@Override
-	protected File[] getFilesToParse(File folder) {
-		// check /src directory
-		File src = new File(folder, "src");
-		String name = folder.getName();
-		if (src.exists()) {
-			folder = src;
-		}
+    @Override
+    protected File[] getFilesToParse( File folder ) {
+        // check /src directory
+        File src = new File(folder, "src");
+        String name = folder.getName();
+        if (src.exists()) {
+            folder = src;
+        }
 
-		return folder.listFiles(new ExtFileFilter(".h"));
-	}
+        return folder.listFiles(new ExtFileFilter(".h"));
+    }
 
-	@Override
-	protected void configParser(SourceParser parser, File currentFile) {
-		// TODO Auto-generated method stub
+    @Override
+    protected void configParser( SourceParser parser , File currentFile ) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	protected String getLibraryName() {
-		return folder.getName();
-	}
+    @Override
+    protected String getLibraryName() {
+        return folder.getName();
+    }
 
 }

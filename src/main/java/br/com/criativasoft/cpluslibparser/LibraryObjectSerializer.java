@@ -52,15 +52,14 @@ public class LibraryObjectSerializer implements LibrarySerializer {
     public TLibrary deserialize( File file ) throws IOException {
         InputStream stream = new FileInputStream(file);
         InputStream buffer = new BufferedInputStream(stream);
-        ObjectInput input = new ObjectInputStream (buffer);
+        ObjectInput input = new ObjectInputStream(buffer);
         TLibrary library = null;
         try {
             library = (TLibrary) input.readObject();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
-        finally{
-          input.close();
+        } finally {
+            input.close();
         }
         return library;
     }

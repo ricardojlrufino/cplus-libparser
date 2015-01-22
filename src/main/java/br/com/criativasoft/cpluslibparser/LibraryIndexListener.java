@@ -24,11 +24,11 @@ import br.com.criativasoft.cpluslibparser.metadata.TLibrary;
  * @date 22/11/2014
  */
 public interface LibraryIndexListener {
-    
-    void onLoadLibrary(TLibrary library);
-    
-    void onUnloadLibrary(TLibrary library);
-    
-    void onReloadLibrary(TLibrary library);
+
+    void onLoadLibrary( TLibrary library );
+
+    void onUnloadLibrary( TLibrary library );
+
+    void onReloadLibrary( TLibrary library );
 
 }

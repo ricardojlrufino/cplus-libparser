@@ -53,6 +53,10 @@ public class LibraryIndex {
 	    else return globalCache;
     }
 	
+    public Map<String, TLibrary> getLibraries() {
+        return getCache().getLibraries();
+    }
+	
     public static void addLibrary(TLibrary library){
         LibraryCache cache = getCache();
         
@@ -210,6 +214,8 @@ public class LibraryIndex {
     public static TLibrary getLibrary(String name){
         return getCache().getLibrary(name);
     }
+    
+    
     
     public static boolean addListener( LibraryIndexListener e ) {
         return getCache().addListener(e);
