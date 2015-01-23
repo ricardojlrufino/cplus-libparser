@@ -53,7 +53,7 @@ public class LibraryIndex {
 	    else return globalCache;
     }
 	
-    public Map<String, TLibrary> getLibraries() {
+    public static Map<String, TLibrary> getLibraries() {
         return getCache().getLibraries();
     }
 	
