@@ -17,47 +17,18 @@
 package br.com.criativasoft.cpluslibparser;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.eclipse.cdt.core.dom.ast.ExpansionOverlapsBoundaryException;
-import org.eclipse.cdt.core.dom.ast.IASTArrayDeclarator;
-import org.eclipse.cdt.core.dom.ast.IASTComment;
-import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
-import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
-import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
-import org.eclipse.cdt.core.dom.ast.IASTEnumerationSpecifier;
+import org.eclipse.cdt.core.dom.ast.*;
 import org.eclipse.cdt.core.dom.ast.IASTEnumerationSpecifier.IASTEnumerator;
-import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
-import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
-import org.eclipse.cdt.core.dom.ast.IASTName;
-import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
-import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
-import org.eclipse.cdt.core.dom.ast.IASTPreprocessorFunctionStyleMacroDefinition;
-import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroDefinition;
-import org.eclipse.cdt.core.dom.ast.IASTPreprocessorObjectStyleMacroDefinition;
-import org.eclipse.cdt.core.dom.ast.IASTProblem;
-import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
-import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier.ICPPASTBaseSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 import org.eclipse.cdt.core.dom.ast.gnu.cpp.GPPLanguage;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ITranslationUnit;
-import org.eclipse.cdt.core.parser.DefaultLogService;
-import org.eclipse.cdt.core.parser.FileContent;
-import org.eclipse.cdt.core.parser.IParserLogService;
-import org.eclipse.cdt.core.parser.IScannerInfo;
-import org.eclipse.cdt.core.parser.IncludeFileContentProvider;
-import org.eclipse.cdt.core.parser.ScannerInfo;
+import org.eclipse.cdt.core.parser.*;
 import org.eclipse.cdt.internal.core.dom.parser.ASTProblem;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTranslationUnit;
@@ -66,13 +37,8 @@ import org.eclipse.cdt.internal.core.parser.scanner.CharArray;
 import org.eclipse.cdt.internal.core.parser.scanner.InternalFileContent;
 import org.eclipse.core.runtime.CoreException;
 
-import br.com.criativasoft.cpluslibparser.metadata.TAttribute;
-import br.com.criativasoft.cpluslibparser.metadata.TClass;
+import br.com.criativasoft.cpluslibparser.metadata.*;
 import br.com.criativasoft.cpluslibparser.metadata.TClass.TClassType;
-import br.com.criativasoft.cpluslibparser.metadata.TElement;
-import br.com.criativasoft.cpluslibparser.metadata.TElementLocation;
-import br.com.criativasoft.cpluslibparser.metadata.TError;
-import br.com.criativasoft.cpluslibparser.metadata.TFunction;
 
 
 public class SourceParser {
@@ -109,16 +75,6 @@ public class SourceParser {
     private IASTCompositeTypeSpecifier curreType;
     private IASTNode curretNode;
     private ICPPASTVisibilityLabel publicScopeLabel = null;
-    
-    public static void main( String[] args ) {
-//        new SourceParser().parse(new File("/media/Dados/Codigos/Java/Projetos/OpenDevice/opendevice-hardware-libraries/arduino/OpenDevice/DeviceConnection.h"));
-//        new SourceParser().parse(new File("/media/Dados/Codigos/Java/Projetos/OpenDevice/opendevice-hardware-libraries/arduino/OpenDevice/DeviceManager.h"));
-         new SourceParser().parse(new File("/media/Dados/Codigos/Java/Projetos/OpenDevice/opendevice-hardware-libraries/arduino/OpenDevice/OpenDevice.h"));
-//        new SourceParser().parse(new File("/home/ricardo/Documentos/arduino-1.0.6/libraries/Ethernet/examples/AdvancedChatServer/AdvancedChatServer.ino"));
-//        new SourceParser().parse(new File("/media/Dados/Programacao/arduino-1.5.8/hardware/arduino/avr/cores/arduino/Arduino.h"));
-//        new SourceParser().parse(new File("/media/Dados/Programacao/arduino-src/hardware/arduino/avr/cores/arduino/HardwareSerial.h"));
-//        new SourceParser().parse(new File("/media/Dados/Programacao/arduino-1.5.8/hardware/arduino/avr/cores/arduino/USBCore.h"));
-    }
     
     public void parse(String sourceCode){
     	FileContent fileContent = new InternalFileContent(defaultFileName, new CharArray(sourceCode));
@@ -292,7 +248,27 @@ public class SourceParser {
         
         // Class type declaration... 
         if(node instanceof IASTCompositeTypeSpecifier){
-        	
+            
+            // Its a typedef inside class
+            if(curreType != null && curreType != node && curreType.contains(node)){
+                if(isPublic(node)){
+                    _debug("> typedef inside class: " + curreType.getName().getRawSignature(), index);
+                
+                    // process typedef
+                    IASTCompositeTypeSpecifier lastType = curreType;
+                    TClass lastClass = currentClass;
+                    curreType = (IASTCompositeTypeSpecifier) node;
+                    navigateTree(node, index);
+                    
+                    // restore current
+                    curreType = lastType;
+                    currentClass = lastClass;
+                return;                  
+                }else{ // ignore private typedef
+                    return;
+                }
+            }
+            
             curreType = (IASTCompositeTypeSpecifier) node;
             
             publicScopeLabel = null;
@@ -302,7 +278,7 @@ public class SourceParser {
             
             if(name == null || name.trim().length() == 0){
             	
-            	 // In struct the name has in another structure (is a sibling node).
+            	 // In struct the name has in another structure (is a sibling node IASTSimpleDeclaration).
             	 if(curreType.getKey() == IASTCompositeTypeSpecifier.k_struct){
                  	if(curreType.getParent() instanceof IASTSimpleDeclaration){
                  		IASTSimpleDeclaration parentDec = (IASTSimpleDeclaration) curreType.getParent();
@@ -673,6 +649,9 @@ public class SourceParser {
     	
     }
     
+    /**
+     * Finds and saves the position / in which demarcates the public variables
+     */
     private void findPublicScopeLabel( IASTCompositeTypeSpecifier type ) {
         IASTNode[] children = type.getChildren();
         
