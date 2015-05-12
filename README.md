@@ -1,7 +1,7 @@
 cplus-libparser
 ========
 
-Library for metadata extraction (information about classes, methods, variables) of source code in C / C ++.  
+Library for metadata extraction (information about classes, methods, variables) of source code in C/C++.  
 This library uses the Eclipse parser (standalone), and extracts the most relevant information (primarily used to autocomplete).
 
 The main advantage is that it is entirely in **Java** and no requires native code (like JNI) .  
