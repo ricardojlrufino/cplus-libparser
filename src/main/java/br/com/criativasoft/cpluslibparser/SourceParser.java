@@ -418,14 +418,19 @@ public class SourceParser {
                     
                     if(attribute.name().length() > 2){ // ignore small variables. ex:. for(int i=0)
                     	setSourceLocation(attribute, node);
-                    	TFunction findParent = findParentTFunction(node);
-                    	if(findParent != null){
-                    		attribute.setLocal(true);
-                    		attribute.setPublic(false);
-                    		attribute.setParent(findParent);
-                    		findParent.addLocalVariable(attribute);
-                    		_debug("> Body-Variable:" + attribute, index);
-                    	}else{
+                    	CPPASTFunctionDefinition findParentDef = findParent(node, CPPASTFunctionDefinition.class);
+                    	
+                    	// check if inside function def
+                    	if(findParentDef != null){
+                        	TFunction findParent = findParentTFunction(node);
+                        	if(findParent != null){
+                        		attribute.setLocal(true);
+                        		attribute.setPublic(false);
+                        		attribute.setParent(findParent);
+                        		findParent.addLocalVariable(attribute);
+                        		_debug("> Body-Variable:" + attribute, index);
+                        	}
+                       }else{
                     		_debug("> Global-Variable:" + attribute, index);
                     		attribute.setStatic(true);
                     		attribute.setPublic(true);
@@ -538,7 +543,7 @@ public class SourceParser {
         if(name != null && name.trim().length() != 0){
             
             // Ignore...
-            if(name.startsWith("~") || name.startsWith("operator ")) return null;
+            if(name.startsWith("~") || name.startsWith("operator")) return null;
             
             String signatureDec = "";
             String freturn = null;
@@ -563,6 +568,9 @@ public class SourceParser {
             
             TFunction function = new TFunction(name, currentClass);
             function.setPublic(isPublic(node));
+            
+            if(currentClass != null && currentClass.getType() == TClassType.STRUCT) function.setPublic(true);
+            
             function.setStatic(signatureDec.contains(STR_STATIC));
             if(freturn != null && !STR_VOID.equals(freturn)){
                 function.setReturnType(freturn);
@@ -624,6 +632,7 @@ public class SourceParser {
     	if(findParent != null){
     		String function = findParent.getDeclarator().getName().toString();
     		
+    		// TODO: need check currentClass ? (NOTE: currentClass is not cleared !)
     		for (TFunction tFunction : globalFunctions) {
     			
     			if(tFunction.name().equals(function)){ 
