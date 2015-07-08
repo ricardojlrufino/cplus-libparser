@@ -35,7 +35,12 @@ public class TElementLocation implements Serializable {
     }
     
     public TElementLocation(int offset, int length) {
+        this(null, offset, length);
+    }
+    
+    public TElementLocation(String path, int offset, int length) {
         super();
+        this.path = path;
         this.offset = offset;
         this.length = length;
     }

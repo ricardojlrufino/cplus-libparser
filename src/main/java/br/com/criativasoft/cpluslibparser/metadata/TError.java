@@ -81,6 +81,16 @@ public class TError extends TElement {
         return -1;
     }
     
+    /**
+     * @see {@link TElementLocation#getPath()}
+     * @return
+     */
+    public String getPath() {
+        TElementLocation location = getLocation();
+        if(location != null) return location.getPath();
+        return null;
+    }
+    
     public static boolean containsError(int offset, Collection<TError> errors){
         for (TError error : errors) {
             if(error.getLocation() != null && error.getLocation().containsOffset(offset)){

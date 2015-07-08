@@ -16,8 +16,10 @@
  *******************************************************************************/
 package br.com.criativasoft.cpluslibparser.metadata;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class TLibrary extends TElement {
@@ -97,6 +99,18 @@ public class TLibrary extends TElement {
     	return elements;
     }
     
+    public TElement findMember(String name){
+    	Set<TElement> elements = getAllMembers();
+    	
+    	for (TElement element : elements) {
+			if(element.name().equals(name)){
+				return element;
+			}
+		}
+    	
+    	return null;
+    }
+    
     public void merge(TLibrary library){
     	addAllClass(library.getClasses());
     	globalFunctions.addAll(library.getGlobalFunctions());
@@ -111,6 +125,10 @@ public class TLibrary extends TElement {
 
 	public void addAllGlobalFunctions(Set<TFunction> globalFunctions) {
 		this.globalFunctions.addAll(globalFunctions);
+	}
+	
+	public void addError(TError error){
+		this.errors.add(error);
 	}
 	
 	public void setErrors( Set<TError> errors ) {
@@ -129,6 +147,31 @@ public class TLibrary extends TElement {
 		globalVariables.clear();
 	}
 	
+	/**
+	 * Clear metadata associated with this file
+	 * @param path - file path
+	 */
+	public void clear(String path) {
+		List<TElement> list = new ArrayList<TElement>();
+		list.addAll(classes);
+		list.addAll(errors);
+		list.addAll(globalVariables);
+		list.addAll(globalFunctions);
+		
+		for (TElement tElement : list) {
+			if(tElement.getLocation() != null){
+				TElementLocation location = tElement.getLocation();
+				if (location != null && location.getPath() != null 
+					&& (path.equals(location.getPath()) ||  path.endsWith(location.getPath()))) {
+					classes.remove(tElement);
+					errors.remove(tElement);
+					globalVariables.remove(tElement);
+					globalFunctions.remove(tElement);
+				}
+			}
+		}
+	}
+	
 	public void setLastUpdate( long lastUpdate ) {
         this.lastUpdate = lastUpdate;
     }
@@ -136,5 +179,7 @@ public class TLibrary extends TElement {
 	public long getLastUpdate() {
         return lastUpdate;
     }
+
+
 
 }

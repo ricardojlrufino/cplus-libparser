@@ -117,6 +117,9 @@ public class TClass extends TElement {
     }
 
     public boolean add( TFunction e ) {
+    	
+    	if(getType() == TClassType.STRUCT) e.setPublic(true);
+    	
         return functions.add(e);
     }
     
