@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
 
+import br.com.criativasoft.cpluslibparser.metadata.TElementLocation;
 import br.com.criativasoft.cpluslibparser.metadata.TLibrary;
 
 // TODO: DOCS
@@ -108,6 +109,8 @@ public abstract class LibraryScanner {
         }
 
         TLibrary library = collectMetadata(runningParser);
+        TElementLocation location = new TElementLocation(folder.getPath(), 0, 0);
+        library.setLocation(location);
 
         if (library != null && serialize) {
             File cache = new File(folder, useCacheFile);
